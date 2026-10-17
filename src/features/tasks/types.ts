@@ -10,3 +10,8 @@ export type Task = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TaskDraft = Pick<Task, 'title' | 'priority'> &
+  Partial<Pick<Task, 'notes' | 'dueDate'>>;
+
+export type TaskUpdate = Partial<Pick<Task, 'title' | 'notes' | 'dueDate' | 'priority'>>;
