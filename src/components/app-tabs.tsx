@@ -3,7 +3,21 @@ import { Image } from 'react-native';
 
 export default function AppTabs() {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#101014',
+          borderTopColor: '#242429',
+          height: 76,
+          paddingTop: 10,
+          paddingBottom: 12,
+        },
+        tabBarActiveTintColor: '#F4F4F5',
+        tabBarInactiveTintColor: '#686872',
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{

@@ -48,7 +48,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
         contentContainerStyle={[styles.listContent, { paddingBottom: insets.bottom + 104 }]}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.eyebrow}>{showCompleted ? 'YOUR PROGRESS' : 'TASK MANAGER'}</Text>
+            <Text style={styles.eyebrow}>{showCompleted ? 'YOUR PROGRESS' : 'FOCUS · TASKS'}</Text>
             <View style={styles.headingRow}>
               <View style={styles.headingCopy}>
                 <Text style={styles.title}>{showCompleted ? 'Completed' : 'My tasks'}</Text>
@@ -56,7 +56,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
                   {showCompleted
                     ? `${visibleTasks.length} task${visibleTasks.length === 1 ? '' : 's'} finished`
                     : remainingCount === 0
-                      ? 'A clear list is a good place to start.'
+                      ? 'A little progress, every day.'
                       : `${remainingCount} task${remainingCount === 1 ? '' : 's'} to focus on`}
                 </Text>
               </View>
@@ -78,15 +78,16 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
             </View>
 
             {!showCompleted && (
-              <View style={styles.summaryCard}>
-                <View style={styles.summaryMark} />
-                <View style={styles.summaryCopy}>
-                  <Text style={styles.summaryTitle}>Make today count</Text>
-                  <Text style={styles.summaryText}>
-                    {tasks.length === 0
-                      ? 'Add your first task and build momentum.'
-                      : `${tasks.length - remainingCount} completed · ${remainingCount} remaining`}
-                  </Text>
+              <View style={styles.statsRow}>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{remainingCount}</Text>
+                  <Text style={styles.statTitle}>To do</Text>
+                  <Text style={styles.statCaption}>Keep your focus</Text>
+                </View>
+                <View style={styles.statCard}>
+                  <Text style={styles.statValue}>{tasks.length - remainingCount}</Text>
+                  <Text style={styles.statTitle}>Completed</Text>
+                  <Text style={styles.statCaption}>Small wins add up</Text>
                 </View>
               </View>
             )}
@@ -142,9 +143,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
                 {showCompleted ? 'No completed tasks yet' : 'Nothing on your list yet'}
               </Text>
               <Text style={styles.emptyText}>
-                {showCompleted
-                  ? 'Finished tasks will appear here.'
-                  : 'Add a task to get started. You can keep it simple and add details later.'}
+                {showCompleted ? 'Finished tasks will appear here.' : 'Tap the plus to add your first task.'}
               </Text>
             </View>
           )
@@ -211,38 +210,42 @@ function TaskRow({
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#F7F7FB' },
+  safeArea: { flex: 1, backgroundColor: '#0C0C10' },
   listContent: { width: '100%', maxWidth: 720, alignSelf: 'center', paddingHorizontal: 22 },
   header: { paddingTop: 14 },
-  eyebrow: { color: '#716BA0', fontSize: 12, fontWeight: '800', letterSpacing: 1.6 },
+  eyebrow: { color: '#92929D', fontSize: 11, fontWeight: '800', letterSpacing: 1.8 },
   headingRow: { flexDirection: 'row', alignItems: 'center', gap: 16, marginTop: 10 },
   headingCopy: { flex: 1 },
-  title: { color: '#1B1B2A', fontSize: 32, lineHeight: 39, fontWeight: '800' },
-  subtitle: { color: '#737588', fontSize: 15, lineHeight: 21, marginTop: 4 },
+  title: { color: '#F7F7F8', fontSize: 34, lineHeight: 42, fontWeight: '800' },
+  subtitle: { color: '#96969F', fontSize: 15, lineHeight: 21, marginTop: 4 },
   addButton: {
     width: 52,
     height: 52,
-    borderRadius: 18,
+    borderRadius: 26,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#29246C',
+    backgroundColor: '#26262C',
   },
   addButtonText: { color: '#FFFFFF', fontSize: 28, lineHeight: 32, fontWeight: '400' },
-  summaryCard: {
-    minHeight: 92,
+  statsRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    padding: 18,
+    gap: 12,
     marginTop: 24,
     marginBottom: 28,
-    borderRadius: 22,
-    backgroundColor: '#EAE9F8',
   },
-  summaryMark: { width: 8, height: 48, borderRadius: 4, backgroundColor: '#5146A5' },
-  summaryCopy: { flex: 1 },
-  summaryTitle: { color: '#28244E', fontSize: 16, fontWeight: '700' },
-  summaryText: { color: '#666483', fontSize: 13, lineHeight: 18, marginTop: 4 },
+  statCard: {
+    minHeight: 144,
+    flex: 1,
+    justifyContent: 'flex-end',
+    padding: 18,
+    borderRadius: 24,
+    backgroundColor: '#242429',
+    borderWidth: 1,
+    borderColor: '#303036',
+  },
+  statValue: { color: '#F6F6F7', fontSize: 36, lineHeight: 40, fontWeight: '800' },
+  statTitle: { color: '#F1F1F3', fontSize: 16, fontWeight: '700', marginTop: 10 },
+  statCaption: { color: '#9999A3', fontSize: 12, marginTop: 4 },
   errorBanner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -250,12 +253,12 @@ const styles = StyleSheet.create({
     padding: 14,
     marginTop: 18,
     borderRadius: 14,
-    backgroundColor: '#FDECEA',
+    backgroundColor: '#34201F',
   },
-  errorText: { flex: 1, color: '#8E251E', fontSize: 14, lineHeight: 20 },
+  errorText: { flex: 1, color: '#FFB4AA', fontSize: 14, lineHeight: 20 },
   retryButton: { minHeight: 44, minWidth: 54, alignItems: 'center', justifyContent: 'center' },
-  retryText: { color: '#8E251E', fontWeight: '700', fontSize: 14 },
-  sectionTitle: { color: '#262738', fontSize: 18, fontWeight: '700', marginBottom: 14 },
+  retryText: { color: '#FFB4AA', fontWeight: '700', fontSize: 14 },
+  sectionTitle: { color: '#F1F1F3', fontSize: 18, fontWeight: '700', marginBottom: 14 },
   taskCard: {
     minHeight: 92,
     flexDirection: 'row',
@@ -264,31 +267,31 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#202025',
     borderWidth: 1,
-    borderColor: '#EEEEF3',
+    borderColor: '#303036',
   },
   checkbox: {
     width: 48,
     height: 48,
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: '#C6C5D5',
+    borderColor: '#55555F',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkboxChecked: { backgroundColor: '#5146A5', borderColor: '#5146A5' },
-  checkmark: { color: '#FFFFFF', fontSize: 20, fontWeight: '700' },
+  checkboxChecked: { backgroundColor: '#E9E9EE', borderColor: '#E9E9EE' },
+  checkmark: { color: '#17171B', fontSize: 20, fontWeight: '700' },
   taskDetails: { flex: 1, minHeight: 58, justifyContent: 'center', paddingVertical: 4 },
-  taskTitle: { color: '#242536', fontSize: 16, lineHeight: 22, fontWeight: '600' },
-  taskTitleDone: { color: '#86879A', textDecorationLine: 'line-through' },
-  taskNotes: { color: '#77798B', fontSize: 13, lineHeight: 18, marginTop: 3 },
+  taskTitle: { color: '#F2F2F4', fontSize: 16, lineHeight: 22, fontWeight: '600' },
+  taskTitleDone: { color: '#777780', textDecorationLine: 'line-through' },
+  taskNotes: { color: '#A0A0AA', fontSize: 13, lineHeight: 18, marginTop: 3 },
   taskMeta: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 7 },
   priority: { overflow: 'hidden', paddingHorizontal: 9, paddingVertical: 4, borderRadius: 8, fontSize: 11, fontWeight: '700', textTransform: 'capitalize' },
-  priority_low: { color: '#276749', backgroundColor: '#E4F4EB' },
-  priority_medium: { color: '#8A5B16', backgroundColor: '#FFF1D7' },
-  priority_high: { color: '#A33232', backgroundColor: '#FCE7E7' },
-  dueDate: { color: '#7D7F90', fontSize: 12 },
+  priority_low: { color: '#B8E4C7', backgroundColor: '#1D3527' },
+  priority_medium: { color: '#F0D49E', backgroundColor: '#3A3020' },
+  priority_high: { color: '#F3B5B5', backgroundColor: '#3A2425' },
+  dueDate: { color: '#A0A0AA', fontSize: 12 },
   separator: { height: 10 },
   emptyState: { alignItems: 'center', paddingHorizontal: 24, paddingTop: 44, paddingBottom: 30 },
   emptyIcon: {
@@ -297,12 +300,14 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EAE9F8',
+    backgroundColor: '#242429',
+    borderWidth: 1,
+    borderColor: '#414149',
     marginBottom: 16,
   },
-  emptyIconText: { color: '#5146A5', fontSize: 30, fontWeight: '500' },
-  emptyTitle: { color: '#292A3A', fontSize: 17, fontWeight: '700', textAlign: 'center' },
-  emptyText: { maxWidth: 300, color: '#77798B', fontSize: 14, lineHeight: 21, textAlign: 'center', marginTop: 8 },
+  emptyIconText: { color: '#F4F4F5', fontSize: 30, fontWeight: '500' },
+  emptyTitle: { color: '#F4F4F5', fontSize: 17, fontWeight: '700', textAlign: 'center' },
+  emptyText: { maxWidth: 300, color: '#92929D', fontSize: 14, lineHeight: 21, textAlign: 'center', marginTop: 8 },
   emptyAction: {
     minHeight: 50,
     paddingHorizontal: 20,
