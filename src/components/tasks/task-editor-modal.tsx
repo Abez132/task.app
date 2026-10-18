@@ -15,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTasks } from '@/features/tasks/task-provider';
 import type { Task, TaskPriority } from '@/features/tasks/types';
 
+import { CalendarDatePicker } from './calendar-date-picker';
+
 type TaskEditorModalProps = {
   visible: boolean;
   task: Task | null;
@@ -155,16 +157,7 @@ export function TaskEditorModal({ visible, task, onClose }: TaskEditorModalProps
             />
 
             <Text style={styles.label}>Due date</Text>
-            <TextInput
-              value={dueDate}
-              onChangeText={setDueDate}
-              placeholder="YYYY-MM-DD (optional)"
-              placeholderTextColor="#7C8190"
-              style={styles.input}
-              maxLength={10}
-              keyboardType="default"
-              accessibilityLabel="Due date in year, month, day format"
-            />
+            <CalendarDatePicker value={dueDate} onChange={setDueDate} />
 
             <Text style={styles.label}>Priority</Text>
             <View style={styles.priorityRow}>
