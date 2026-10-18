@@ -60,7 +60,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
                       : `${remainingCount} task${remainingCount === 1 ? '' : 's'} to focus on`}
                 </Text>
               </View>
-              {!showCompleted && (
+              {!showCompleted && remainingCount > 0 && (
                 <Pressable
                   onPress={openNewTask}
                   disabled={isLoading}
@@ -123,9 +123,21 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
             </View>
           ) : (
             <View style={styles.emptyState}>
-              <View style={styles.emptyIcon}>
-                <Text style={styles.emptyIconText}>{showCompleted ? '✓' : '＋'}</Text>
-              </View>
+              {showCompleted ? (
+                <View style={styles.emptyIcon}>
+                  <Text style={styles.emptyIconText}>✓</Text>
+                </View>
+              ) : (
+                <Pressable
+                  onPress={openNewTask}
+                  disabled={isLoading}
+                  accessibilityRole="button"
+                  accessibilityLabel="Add your first task"
+                  style={({ pressed }) => [styles.emptyIcon, pressed && styles.pressed]}
+                >
+                  <Text style={styles.emptyIconText}>＋</Text>
+                </Pressable>
+              )}
               <Text style={styles.emptyTitle}>
                 {showCompleted ? 'No completed tasks yet' : 'Nothing on your list yet'}
               </Text>
@@ -134,15 +146,6 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
                   ? 'Finished tasks will appear here.'
                   : 'Add a task to get started. You can keep it simple and add details later.'}
               </Text>
-              {!showCompleted && (
-                <Pressable
-                  onPress={openNewTask}
-                  accessibilityRole="button"
-                  style={({ pressed }) => [styles.emptyAction, pressed && styles.pressed]}
-                >
-                  <Text style={styles.emptyActionText}>Create your first task</Text>
-                </Pressable>
-              )}
             </View>
           )
         }
