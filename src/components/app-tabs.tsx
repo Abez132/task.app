@@ -7,7 +7,7 @@ export default function AppTabs() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Tasks',
           tabBarIcon: ({ color }) => (
             <Image
               source={require('@/assets/images/tabIcons/home.png')}
@@ -19,7 +19,7 @@ export default function AppTabs() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: 'Done',
           tabBarIcon: ({ color }) => (
             <Image
               source={require('@/assets/images/tabIcons/explore.png')}
