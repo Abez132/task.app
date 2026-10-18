@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -8,6 +8,15 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { useTasks } from '@/features/tasks/task-provider';
 import type { Task } from '@/features/tasks/types';
@@ -23,6 +32,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
   const { tasks, isLoading, error, reloadTasks, changeTaskCompletion } = useTasks();
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
+  const [newTaskId, setNewTaskId] = useState<string | null>(null);
 
   const visibleTasks = useMemo(
     () => tasks.filter((task) => task.completed === showCompleted),
@@ -38,6 +48,14 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
   function openTask(task: Task) {
     setEditingTask(task);
     setIsEditorOpen(true);
+  }
+
+  async function toggleTask(task: Task) {
+    try {
+      await changeTaskCompletion(task.id, !task.completed);
+    } catch {
+      // The provider keeps and displays the storage error for retry.
+    }
   }
 
   return (
@@ -111,8 +129,9 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
         renderItem={({ item }) => (
           <TaskRow
             task={item}
+            isNew={item.id === newTaskId}
             onOpen={() => openTask(item)}
-            onToggle={() => void changeTaskCompletion(item.id, !item.completed).catch(() => undefined)}
+            onToggle={() => void toggleTask(item)}
           />
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -154,6 +173,7 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
         visible={isEditorOpen}
         task={editingTask}
         onClose={() => setIsEditorOpen(false)}
+        onTaskCreated={setNewTaskId}
       />
     </SafeAreaView>
   );
@@ -161,17 +181,79 @@ export function TaskListScreen({ showCompleted = false }: TaskListScreenProps) {
 
 function TaskRow({
   task,
+  isNew,
   onOpen,
   onToggle,
 }: {
   task: Task;
+  isNew: boolean;
   onOpen: () => void;
   onToggle: () => void;
 }) {
+  const [isAnimating, setIsAnimating] = useState(false);
+  const scale = useSharedValue(isNew ? 0.72 : 1);
+  const opacity = useSharedValue(isNew ? 0 : 1);
+  const sparkleScale = useSharedValue(0);
+  const sparkleOpacity = useSharedValue(0);
+
+  useEffect(() => {
+    if (!isNew) return;
+    scale.value = 0.72;
+    opacity.value = 0;
+    scale.value = withSpring(1, { damping: 20, stiffness: 420, mass: 0.7 });
+    opacity.value = withTiming(1, { duration: 240 });
+  }, [isNew, opacity, scale]);
+
+  const animatedCardStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ scale: scale.value }],
+  }));
+  const sparkleStyle = useAnimatedStyle(() => ({
+    opacity: sparkleOpacity.value,
+    transform: [{ scale: sparkleScale.value }, { rotate: '12deg' }],
+  }));
+
+  function animateCompletion() {
+    if (isAnimating) return;
+    if (task.completed) {
+      onToggle();
+      return;
+    }
+    setIsAnimating(true);
+    sparkleScale.value = withSequence(
+      withTiming(1.35, { duration: 270 }),
+      withTiming(0.35, { duration: 310 })
+    );
+    sparkleOpacity.value = withSequence(
+      withTiming(1, { duration: 230 }),
+      withDelay(130, withTiming(0, { duration: 260 }))
+    );
+    scale.value = withSequence(
+      withTiming(1.04, { duration: 160 }),
+      withTiming(0.65, { duration: 460 })
+    );
+    opacity.value = withDelay(
+      160,
+      withTiming(0, { duration: 460 }, (finished) => {
+        if (finished) runOnJS(onToggle)();
+      })
+    );
+  }
+
   return (
-    <View style={styles.taskCard}>
+    <Animated.View style={[styles.taskCard, animatedCardStyle]}>
+      <Animated.View pointerEvents="none" style={[styles.sparkleLayer, sparkleStyle]}>
+        <Text style={[styles.sparkle, styles.sparkleTopLeft]}>✦</Text>
+        <Text style={[styles.sparkle, styles.sparkleTopCenter]}>✧</Text>
+        <Text style={[styles.sparkle, styles.sparkleTopRight]}>✦</Text>
+        <Text style={[styles.sparkle, styles.sparkleLeft]}>✧</Text>
+        <Text style={[styles.sparkle, styles.sparkleRight]}>✧</Text>
+        <Text style={[styles.sparkle, styles.sparkleBottomLeft]}>✦</Text>
+        <Text style={[styles.sparkle, styles.sparkleBottomRight]}>✧</Text>
+      </Animated.View>
       <Pressable
-        onPress={onToggle}
+        onPress={animateCompletion}
+        disabled={isAnimating}
         accessibilityRole="checkbox"
         accessibilityLabel={`${task.completed ? 'Reopen' : 'Complete'} ${task.title}`}
         accessibilityState={{ checked: task.completed }}
@@ -205,7 +287,7 @@ function TaskRow({
           {!!task.dueDate && <Text style={styles.dueDate}>Due {task.dueDate}</Text>}
         </View>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -270,6 +352,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#202025',
     borderWidth: 1,
     borderColor: '#303036',
+    overflow: 'visible',
   },
   checkbox: {
     width: 48,
@@ -318,6 +401,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#29246C',
   },
   emptyActionText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
+  sparkleLayer: { position: 'absolute', zIndex: 2, left: -8, right: -8, top: -10, bottom: -10 },
+  sparkle: { position: 'absolute', color: '#F4D982', fontSize: 18, fontWeight: '700' },
+  sparkleTopLeft: { top: -2, left: 24, fontSize: 16 },
+  sparkleTopCenter: { top: -9, left: '48%', fontSize: 14, color: '#FFF2BD' },
+  sparkleTopRight: { top: 0, right: 32 },
+  sparkleLeft: { top: '43%', left: -2, fontSize: 15, color: '#FFF2BD' },
+  sparkleRight: { top: '48%', right: -2, fontSize: 16 },
+  sparkleBottomLeft: { bottom: -5, left: 56, fontSize: 15 },
+  sparkleBottomRight: { bottom: -8, right: 68, fontSize: 17, color: '#FFF2BD' },
   pressed: { opacity: 0.74 },
   disabledAction: { opacity: 0.5 },
 });

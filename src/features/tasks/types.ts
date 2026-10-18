@@ -7,6 +7,7 @@ export type Task = {
   dueDate: string | null;
   priority: TaskPriority;
   completed: boolean;
+  completedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 };

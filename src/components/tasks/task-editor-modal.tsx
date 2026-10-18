@@ -21,6 +21,7 @@ type TaskEditorModalProps = {
   visible: boolean;
   task: Task | null;
   onClose: () => void;
+  onTaskCreated?: (taskId: string) => void;
 };
 
 const PRIORITIES: TaskPriority[] = ['low', 'medium', 'high'];
@@ -32,7 +33,7 @@ function isValidDate(value: string): boolean {
   return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
-export function TaskEditorModal({ visible, task, onClose }: TaskEditorModalProps) {
+export function TaskEditorModal({ visible, task, onClose, onTaskCreated }: TaskEditorModalProps) {
   const { addTask, updateTask, removeTask } = useTasks();
   const [title, setTitle] = useState('');
   const [notes, setNotes] = useState('');
@@ -76,7 +77,8 @@ export function TaskEditorModal({ visible, task, onClose }: TaskEditorModalProps
       if (task) {
         await updateTask(task.id, draft);
       } else {
-        await addTask(draft);
+        const createdTask = await addTask(draft);
+        onTaskCreated?.(createdTask.id);
       }
       onClose();
     } catch (saveError) {

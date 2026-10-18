@@ -44,6 +44,7 @@ export function createTask(draft: TaskDraft): Promise<Task> {
     dueDate: draft.dueDate ?? null,
     priority: draft.priority,
     completed: false,
+    completedAt: null,
     createdAt: now,
     updatedAt: now,
   };
@@ -75,6 +76,7 @@ export function editTask(id: string, changes: TaskUpdate): Promise<Task> {
 }
 
 export function setTaskCompleted(id: string, completed: boolean): Promise<Task> {
+  const now = new Date().toISOString();
   return updateStoredTasks((tasks) => {
     const taskIndex = tasks.findIndex((task) => task.id === id);
     if (taskIndex === -1) {
@@ -84,7 +86,8 @@ export function setTaskCompleted(id: string, completed: boolean): Promise<Task> 
     const updatedTask: Task = {
       ...tasks[taskIndex],
       completed,
-      updatedAt: new Date().toISOString(),
+      completedAt: completed ? now : null,
+      updatedAt: now,
     };
     const updatedTasks = [...tasks];
     updatedTasks[taskIndex] = updatedTask;
