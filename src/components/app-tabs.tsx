@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppColors } from '@/constants/theme';
 
 export default function AppTabs() {
   const insets = useSafeAreaInsets();
@@ -29,8 +30,8 @@ export default function AppTabs() {
           overflow: 'hidden',
           elevation: 8,
         },
-        tabBarActiveBackgroundColor: '#19191F',
-        tabBarActiveTintColor: '#F4F4F5',
+        tabBarActiveBackgroundColor: '#24113A',
+        tabBarActiveTintColor: AppColors.peach,
         tabBarInactiveTintColor: '#686872',
         tabBarLabelStyle: { fontSize: 11, fontWeight: '700', marginTop: 2 },
       }}

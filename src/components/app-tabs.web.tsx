@@ -8,7 +8,7 @@ import {
 } from 'expo-router/ui';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 
-import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { AppColors, MaxContentWidth, Spacing } from '@/constants/theme';
 
 export default function AppTabs() {
   return (
@@ -83,6 +83,6 @@ const styles = StyleSheet.create({
   },
   tabButtonView: { minWidth: 68, minHeight: 48, paddingHorizontal: 10, borderRadius: 22, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 7 },
   tabIcon: { color: '#686872', fontSize: 22, lineHeight: 25 },
-  tabIconFocused: { color: '#F4F4F5' },
-  tabLabel: { color: '#F4F4F5', fontSize: 12, fontWeight: '700' },
+  tabIconFocused: { color: AppColors.peach },
+  tabLabel: { color: AppColors.peach, fontSize: 12, fontWeight: '700' },
 });

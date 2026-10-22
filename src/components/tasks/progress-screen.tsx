@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppColors } from '@/constants/theme';
 
 import { useTasks } from '@/features/tasks/task-provider';
 
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   overviewTitle: { color: '#F3F3F5', fontSize: 16, fontWeight: '700', marginTop: 8 },
   percent: { color: '#F7F7F8', fontSize: 34, fontWeight: '800' },
   progressTrack: { height: 9, overflow: 'hidden', borderRadius: 8, backgroundColor: '#3A3A42', marginTop: 22 },
-  progressFill: { height: '100%', borderRadius: 8, backgroundColor: '#E9E9EE' },
+  progressFill: { height: '100%', borderRadius: 8, backgroundColor: AppColors.purple },
   overviewCaption: { color: '#A0A0AA', fontSize: 13, marginTop: 12 },
   chartCard: { minHeight: 284, padding: 20, marginTop: 14, borderRadius: 24, backgroundColor: '#242429', borderWidth: 1, borderColor: '#303036' },
   chartHeading: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   barColumn: { flex: 1, alignItems: 'center' },
   barValue: { height: 18, color: '#D9D9DF', fontSize: 11, fontWeight: '700' },
   barTrack: { width: '70%', flex: 1, alignItems: 'center', justifyContent: 'flex-end' },
-  bar: { width: '68%', minHeight: 4, borderRadius: 8, backgroundColor: '#C7C3FF' },
+  bar: { width: '68%', minHeight: 4, borderRadius: 8, backgroundColor: AppColors.peach },
   emptyBar: { backgroundColor: '#54545E' },
   dayLabel: { color: '#92929D', fontSize: 11, marginTop: 8 },
   emptyCopy: { color: '#92929D', fontSize: 14, lineHeight: 21, marginTop: 32 },

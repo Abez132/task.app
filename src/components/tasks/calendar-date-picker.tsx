@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { AppColors } from '@/constants/theme';
 
 type CalendarDatePickerProps = {
   value: string;
@@ -224,10 +225,10 @@ const styles = StyleSheet.create({
   calendarCell: { width: '14.2857%', minHeight: 42, alignItems: 'center', justifyContent: 'center' },
   weekday: { color: '#92929D', fontSize: 11, fontWeight: '700' },
   dayButton: { width: 36, height: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 13 },
-  selectedDay: { backgroundColor: '#E9E9EE' },
+  selectedDay: { backgroundColor: AppColors.purple },
   today: { borderWidth: 1, borderColor: '#9A9AA4' },
   dayText: { color: '#E2E2E6', fontSize: 14 },
-  selectedDayText: { color: '#17171B', fontWeight: '700' },
+  selectedDayText: { color: '#FFFFFF', fontWeight: '700' },
   todayButton: { minHeight: 44, alignItems: 'center', justifyContent: 'center', marginTop: 5 },
   todayButtonText: { color: '#E2E2E6', fontSize: 14, fontWeight: '700' },
   pressed: { opacity: 0.75 },

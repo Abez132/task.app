@@ -11,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { AppColors } from '@/constants/theme';
 
 import { useTasks } from '@/features/tasks/task-provider';
 import type { Task, TaskPriority } from '@/features/tasks/types';
@@ -282,9 +283,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#34343B',
   },
-  priorityButtonSelected: { backgroundColor: '#E9E9EE', borderColor: '#E9E9EE' },
+  priorityButtonSelected: { backgroundColor: AppColors.purple, borderColor: AppColors.purple },
   priorityText: { color: '#B1B1BA', fontSize: 14, fontWeight: '600' },
-  priorityTextSelected: { color: '#17171B' },
+  priorityTextSelected: { color: '#FFFFFF' },
   error: { marginTop: 16, color: '#FFB4AA', fontSize: 14, lineHeight: 20 },
   saveButton: {
     minHeight: 54,
@@ -292,10 +293,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#E9E9EE',
+    backgroundColor: AppColors.purple,
   },
   disabledButton: { opacity: 0.55 },
-  saveButtonText: { color: '#17171B', fontSize: 16, fontWeight: '700' },
+  saveButtonText: { color: '#FFFFFF', fontSize: 16, fontWeight: '700' },
   deleteButton: { minHeight: 50, marginTop: 10, alignItems: 'center', justifyContent: 'center' },
   deleteText: { color: '#FF8A80', fontSize: 15, fontWeight: '600' },
   confirmDeletePanel: { marginTop: 16, padding: 16, borderRadius: 16, backgroundColor: '#34201F' },

@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AppColors } from '@/constants/theme';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -306,7 +307,7 @@ const styles = StyleSheet.create({
     borderRadius: 26,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#26262C',
+    backgroundColor: AppColors.purple,
   },
   addButtonText: { color: '#FFFFFF', fontSize: 28, lineHeight: 32, fontWeight: '400' },
   statsRow: {
@@ -363,8 +364,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkboxChecked: { backgroundColor: '#E9E9EE', borderColor: '#E9E9EE' },
-  checkmark: { color: '#17171B', fontSize: 20, fontWeight: '700' },
+  checkboxChecked: { backgroundColor: AppColors.purple, borderColor: AppColors.purple },
+  checkmark: { color: '#FFFFFF', fontSize: 20, fontWeight: '700' },
   taskDetails: { flex: 1, minHeight: 58, justifyContent: 'center', paddingVertical: 4 },
   taskTitle: { color: '#F2F2F4', fontSize: 16, lineHeight: 22, fontWeight: '600' },
   taskTitleDone: { color: '#777780', textDecorationLine: 'line-through' },
@@ -398,18 +399,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#29246C',
+    backgroundColor: AppColors.purple,
   },
   emptyActionText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
   sparkleLayer: { position: 'absolute', zIndex: 2, left: -8, right: -8, top: -10, bottom: -10 },
-  sparkle: { position: 'absolute', color: '#F4D982', fontSize: 18, fontWeight: '700' },
+  sparkle: { position: 'absolute', color: AppColors.peach, fontSize: 18, fontWeight: '700' },
   sparkleTopLeft: { top: -2, left: 24, fontSize: 16 },
-  sparkleTopCenter: { top: -9, left: '48%', fontSize: 14, color: '#FFF2BD' },
+  sparkleTopCenter: { top: -9, left: '48%', fontSize: 14, color: AppColors.peach },
   sparkleTopRight: { top: 0, right: 32 },
-  sparkleLeft: { top: '43%', left: -2, fontSize: 15, color: '#FFF2BD' },
+  sparkleLeft: { top: '43%', left: -2, fontSize: 15, color: AppColors.peach },
   sparkleRight: { top: '48%', right: -2, fontSize: 16 },
   sparkleBottomLeft: { bottom: -5, left: 56, fontSize: 15 },
-  sparkleBottomRight: { bottom: -8, right: 68, fontSize: 17, color: '#FFF2BD' },
+  sparkleBottomRight: { bottom: -8, right: 68, fontSize: 17, color: AppColors.peach },
   pressed: { opacity: 0.74 },
   disabledAction: { opacity: 0.5 },
 });
